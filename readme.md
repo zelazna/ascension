@@ -5,5 +5,5 @@
 - [X] Create server stuff with uv
 - [X] Create client stuff with create react app
 
-- [] Docker
+- [X] Docker
 - [] Auth
