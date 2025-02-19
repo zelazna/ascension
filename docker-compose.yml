@@ -1,11 +1,11 @@
 services:
   server:
     # Build the image from the Dockerfile in the current directory
-    build: ./server      
+    build: ./server
 
     # Host the FastAPI application on port 8000
     ports:
-      - "8000:8000"
+      - 8000:8000
 
     develop:
       # Create a `watch` configuration to update the appl
@@ -13,29 +13,29 @@ services:
       watch:
         # Sync the working directory with the `/app` directory in the container
         - action: sync
-          path: .
+          path: ./server
           target: /app
           # Exclude the project virtual environment — it could be for a
           # different platform in the container
           ignore:
             - .venv/
-
+            - uv.lock
         # Rebuild the image if dependencies change by checking uv.lock
         - action: rebuild
-          path: ./uv.lock
+          path: ./server/uv.lock
   client:
     build:
       context: ./client
-    volumes:
-     - ./client:/app
     ports:
       - 8080:8080
     develop:
       watch:
         - action: sync
-          path: .
+          path: ./client
           target: /app
-
-        # Rebuild the image if dependencies change by checking uv.lock
+          ignore:
+            - node_modules/
+            - package-lock.json
+            - package.json
         - action: rebuild
-          path: ./package-lock.json
+          path: ./client/package-lock.json
