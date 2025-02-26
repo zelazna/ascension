@@ -6,13 +6,13 @@ import useAuth from './hooks/useAuth';
 
 function Login() {
 
-  const [email, setEmail] = useState("")
+  const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const { onLogin } = useAuth();
 
   function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>) {
     event.preventDefault()
-    onLogin(email, password).then(() => {
+    onLogin(username, password).then(() => {
       console.log("Logged in");
     }).catch((err: unknown) => {
       console.error(err);
@@ -22,9 +22,9 @@ function Login() {
   return (
     <Container className="p-3 my-5 w-25">
       <Form onSubmit={handleSubmit}>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>Email address</Form.Label>
-          <Form.Control onChange={e => { setEmail(e.target.value) }} type="email" placeholder="Enter email" />
+        <Form.Group className="mb-3" controlId="formBasicUsername">
+          <Form.Label>Username</Form.Label>
+          <Form.Control onChange={e => { setUsername(e.target.value) }} type="text" placeholder="Enter username" />
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formBasicPassword">

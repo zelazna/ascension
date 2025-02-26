@@ -1,11 +1,12 @@
 import { createContext } from "react";
 
 export const AuthContext = createContext<{
-    token: string;
+    token: string | null;
     onLogin: (email: string, password: string) => Promise<void>;
-    onLogout: () => void;
+    onLogout: () => Promise<void>;
 }>({
     token: "",
-    onLogin: async () => {},
-    onLogout: () => {}
+    onLogin: async () => Promise.resolve(),
+    onLogout: async () => Promise.resolve()
 });
+
