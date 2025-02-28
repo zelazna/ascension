@@ -1,7 +1,6 @@
-from sqlmodel import SQLModel, Session, create_engine
+from sqlmodel import Session, create_engine
 
 from core.config import settings
-from models import User, UserCreate  # type: ignore  # noqa: F401
 
 engine = create_engine(str(settings.SQLALCHEMY_DATABASE_URI))
 
@@ -14,4 +13,5 @@ engine = create_engine(str(settings.SQLALCHEMY_DATABASE_URI))
 def init_db(session: Session) -> None:
     # Tables should be created with Alembic migrations
     # This works because the models are already imported and registered from models
-    SQLModel.metadata.create_all(engine)
+    # SQLModel.metadata.create_all(engine)
+    ...

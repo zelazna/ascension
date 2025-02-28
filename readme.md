@@ -6,4 +6,5 @@
 - [X] Create client stuff with create react app
 
 - [X] Docker
-- [] Auth
+- [X] Auth
+- [X] Set up alembic

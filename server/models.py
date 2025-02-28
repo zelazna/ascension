@@ -6,8 +6,8 @@ from sqlmodel import Field, SQLModel  # type: ignore
 
 # Shared properties
 class UserBase(SQLModel):
-    email: EmailStr = Field(unique=True, index=True, max_length=255)
-    username: str | None = Field(default=None, max_length=255)
+    email: EmailStr = Field(unique=True, max_length=255)
+    username: str = Field(unique=True, index=True, max_length=255)
 
 
 # Properties to receive via API on creation
@@ -18,7 +18,7 @@ class UserCreate(UserBase):
 class UserRegister(SQLModel):
     email: EmailStr = Field(max_length=255)
     password: str = Field(min_length=8, max_length=40)
-    username: str | None = Field(default=None, max_length=255)
+    username: str = Field(max_length=255)
 
 
 # Properties to receive via API on update, all are optional
