@@ -39,7 +39,15 @@ const Navigation = () => {
           </Nav>
           <Nav className="ms-auto">
             {token && (
-              <Button className="ms-auto" type="button" onClick={onLogout}>
+              <Button
+                className="ms-auto"
+                type="button"
+                onClick={() => {
+                  onLogout().catch((error: unknown) => {
+                    console.error('Logout failed:', error);
+                  });
+                }}
+              >
                 Sign Out
               </Button>
             )}

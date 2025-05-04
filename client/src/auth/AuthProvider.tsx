@@ -8,18 +8,22 @@ interface AuthProviderProps {
     children: React.ReactNode;
 }
 
+interface LoginResponse {
+    access_token: string;
+}
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
     const navigate = useNavigate();
     const location = useLocation();
-    const [token, setToken] = useLocalStorage("access_token", null);
+    const [token, setToken] = useLocalStorage<string | null>("access_token", null);
 
     const handleLogin = async (username: string, password: string) => {
         const form = new FormData();
         form.append('username', username);
         form.append('password', password);
         // TODO create client for axios
-        const response = await axios.post(`${import.meta.env.API_URL as string}/login/access-token`, form)
+
+        const response = await axios.post<LoginResponse>(`${import.meta.env.API_URL as string}/login/access-token`, form);
         setToken(response.data.access_token);
         await navigate(location.state?.from?.pathname || '/game');
     };
