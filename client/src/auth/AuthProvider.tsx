@@ -22,8 +22,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         form.append('username', username);
         form.append('password', password);
         // TODO create client for axios
-
-        const response = await axios.post<LoginResponse>(`${import.meta.env.API_URL as string}/login/access-token`, form);
+        const response = await axios.post<LoginResponse>(`${import.meta.env.VITE_API_URL as string}/login/access-token`, form);
         setToken(response.data.access_token);
         await navigate(location.state?.from?.pathname || '/game');
     };
