@@ -32,4 +32,6 @@ jobs:
       - name: Run tests
         run: uv run pytest
         working-directory: server
+        env:
+            PYTHONPATH: $(pwd)
       - run: docker compose down -v --remove-orphans

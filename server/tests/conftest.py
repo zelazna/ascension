@@ -6,7 +6,7 @@ from core.db import engine, init_db
 from fastapi.testclient import TestClient
 from main import app
 from models import User
-from sqlmodel import Session
+from sqlmodel import Session, delete
 
 from tests.utils import authentication_token_from_username, get_first_user_token_headers
 
@@ -16,8 +16,10 @@ def db() -> Generator[Session, None, None]:
     with Session(engine) as session:
         init_db(session)
         yield session
-        # session.delete(User)
-        # session.commit()
+        statement = delete(User)
+        session.exec(statement) # type: ignore
+        session.commit()
+
 
 
 @pytest.fixture(scope="module")
