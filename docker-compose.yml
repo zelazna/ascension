@@ -56,6 +56,7 @@ services:
           ignore:
             - .venv/
             - uv.lock
+            - tests/
         # Rebuild the image if dependencies change by checking uv.lock
         - action: rebuild
           path: ./server/uv.lock
