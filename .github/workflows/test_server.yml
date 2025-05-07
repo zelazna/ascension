@@ -30,7 +30,7 @@ jobs:
         run: uv run bash scripts/prestart.sh
         working-directory: server
       - name: Run tests
-        run: uv run pytest
+        run: PYTHONPATH=$(pwd) uv run pytest
         working-directory: server
         env:
             PYTHONPATH: $(pwd)
