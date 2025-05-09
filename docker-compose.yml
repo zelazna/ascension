@@ -1,7 +1,7 @@
 services:
   prestart:
     build:
-      context: ./server
+      context: ./backend
     depends_on:
       db:
         condition: service_healthy
@@ -16,9 +16,9 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER?Variable not set}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD?Variable not set}
-  server:
+  backend:
     # Build the image from the Dockerfile in the current directory
-    build: ./server
+    build: ./backend
 
     # Host the FastAPI application on port 8000
     ports:
@@ -49,7 +49,7 @@ services:
       watch:
         # Sync the working directory with the `/app` directory in the container
         - action: sync
-          path: ./server
+          path: ./backend
           target: /app
           # Exclude the project virtual environment — it could be for a
           # different platform in the container
@@ -59,10 +59,10 @@ services:
             - tests/
         # Rebuild the image if dependencies change by checking uv.lock
         - action: rebuild
-          path: ./server/uv.lock
-  client:
+          path: ./backend/uv.lock
+  frontend:
     build:
-      context: ./client
+      context: ./frontend
     ports:
       - 8080:8080
     env_file:
@@ -70,14 +70,14 @@ services:
     develop:
       watch:
         - action: sync
-          path: ./client
+          path: ./frontend
           target: /app
           ignore:
             - node_modules/
             - package-lock.json
             - package.json
         - action: rebuild
-          path: ./client/package-lock.json
+          path: ./frontend/package-lock.json
   db:
     image: postgres:12
     restart: always
