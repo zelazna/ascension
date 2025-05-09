@@ -44,6 +44,7 @@ def get_first_user_token_headers(client: TestClient) -> dict[str, str]:
         password=settings.FIRST_USER_PASSWORD,
     )
 
+
 def authentication_token_from_username(
     *, client: TestClient, username: str, db: Session
 ) -> dict[str, str]:

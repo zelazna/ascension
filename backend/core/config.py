@@ -26,9 +26,9 @@ class Settings(BaseSettings):
         extra="ignore",
     )
     SECRET_KEY: str = secrets.token_urlsafe(32)
-    BACKEND_CORS_ORIGINS: Annotated[list[AnyUrl] | str, BeforeValidator(parse_cors)] = (
-        []
-    )
+    BACKEND_CORS_ORIGINS: Annotated[
+        list[AnyUrl] | str, BeforeValidator(parse_cors)
+    ] = []
     FIRST_USER: str
     FIRST_USER_PASSWORD: str
 
