@@ -1,39 +1,45 @@
-from collections.abc import Generator
+from typing import AsyncGenerator
 
 import pytest
 from core.config import settings
 from core.db import engine, init_db
-from fastapi.testclient import TestClient
+from httpx import ASGITransport, AsyncClient
 from main import app
 from models import User
-from sqlmodel import Session, delete
-
+from sqlmodel import delete
+from sqlmodel.ext.asyncio.session import AsyncSession
 from tests.utils import authentication_token_from_username, get_first_user_token_headers
 
 
-@pytest.fixture(scope="session", autouse=True)
-def db() -> Generator[Session, None, None]:
-    with Session(engine) as session:
-        init_db(session)
+@pytest.fixture(autouse=True)
+async def db() -> AsyncGenerator[AsyncSession, None]:
+    async with AsyncSession(engine) as session:
+        await init_db(session)
         yield session
         statement = delete(User)
-        session.exec(statement)  # type: ignore
-        session.commit()
+        await session.exec(statement)  # type: ignore
+        await session.commit()
 
 
 @pytest.fixture(scope="module")
-def client() -> Generator[TestClient, None, None]:
-    with TestClient(app) as c:
+async def client() -> AsyncGenerator[AsyncClient, None]:
+    async with AsyncClient(
+        transport=ASGITransport(app=app), base_url="http://test"
+    ) as c:
         yield c
 
 
 @pytest.fixture(scope="module")
-def normal_user_token_headers(client: TestClient, db: Session) -> dict[str, str]:
-    return authentication_token_from_username(
+async def normal_user_token_headers(
+    client: AsyncClient, db: AsyncSession
+) -> dict[str, str]:
+    return await authentication_token_from_username(
         client=client, username=settings.FIRST_USER, db=db
     )
 
 
-@pytest.fixture(scope="module")
-def first_user_token_headers(client: TestClient, db: Session) -> dict[str, str]:
-    return get_first_user_token_headers(client=client)
+@pytest.fixture()
+async def first_user_token_headers(
+    client: AsyncClient, db: AsyncSession
+) -> dict[str, str]:
+    return await get_first_user_token_headers(client=client)

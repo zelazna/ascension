@@ -1,8 +1,8 @@
 """initialize_models
 
-Revision ID: 9519f4e58042
+Revision ID: 1015ca4cb50b
 Revises:
-Create Date: 2025-05-04 19:49:49.664895
+Create Date: 2025-05-09 23:14:44.831885
 
 """
 
@@ -12,8 +12,9 @@ from alembic import op
 import sqlalchemy as sa
 import sqlmodel
 
+
 # revision identifiers, used by Alembic.
-revision: str = "9519f4e58042"
+revision: str = "1015ca4cb50b"
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None

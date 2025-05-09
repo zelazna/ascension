@@ -1,22 +1,24 @@
 from typing import Any
 
-from sqlmodel import Session, select
-
 from core.security import get_password_hash, verify_password
 from models import User, UserCreate, UserUpdate
+from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
 
 
-def create_user(*, session: Session, user_create: UserCreate) -> User:
+async def create_user(*, session: AsyncSession, user_create: UserCreate) -> User:
     db_obj = User.model_validate(
         user_create, update={"hashed_password": get_password_hash(user_create.password)}
     )
     session.add(db_obj)
-    session.commit()
-    session.refresh(db_obj)
+    await session.commit()
+    await session.refresh(db_obj)
     return db_obj
 
 
-def update_user(*, session: Session, db_user: User, user_in: UserUpdate) -> Any:
+async def update_user(
+    *, session: AsyncSession, db_user: User, user_in: UserUpdate
+) -> Any:
     user_data = user_in.model_dump(exclude_unset=True)
     extra_data: dict[str, str] = {}
     if "password" in user_data:
@@ -25,35 +27,29 @@ def update_user(*, session: Session, db_user: User, user_in: UserUpdate) -> Any:
         extra_data["hashed_password"] = hashed_password
     db_user.sqlmodel_update(user_data, update=extra_data)
     session.add(db_user)
-    session.commit()
-    session.refresh(db_user)
+    await session.commit()
+    await session.refresh(db_user)
     return db_user
 
 
-def get_user_by_email(*, session: Session, email: str) -> User | None:
+async def get_user_by_email(*, session: AsyncSession, email: str) -> User | None:
     statement = select(User).where(User.email == email)
-    session_user = session.exec(statement).first()
-    return session_user
+    session_user = await session.exec(statement)
+    return session_user.first()
 
 
-def get_user_by_username(*, session: Session, username: str) -> User | None:
+async def get_user_by_username(*, session: AsyncSession, username: str) -> User | None:
     statement = select(User).where(User.username == username)
-    session_user = session.exec(statement).first()
-    return session_user
+    session_user = await session.exec(statement)
+    return session_user.first()
 
 
-def authenticate(*, session: Session, username: str, password: str) -> User | None:
-    db_user = get_user_by_username(session=session, username=username)
+async def authenticate(
+    *, session: AsyncSession, username: str, password: str
+) -> User | None:
+    db_user = await get_user_by_username(session=session, username=username)
     if not db_user:
         return None
     if not verify_password(password, db_user.hashed_password):
         return None
     return db_user
-
-
-# def create_item(*, session: Session, item_in: ItemCreate, owner_id: uuid.UUID) -> Item:
-#     db_item = Item.model_validate(item_in, update={"owner_id": owner_id})
-#     session.add(db_item)
-#     session.commit()
-#     session.refresh(db_item)
-#     return db_item

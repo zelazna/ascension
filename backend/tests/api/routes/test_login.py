@@ -1,32 +1,36 @@
 from core.config import settings
-from fastapi.testclient import TestClient
+from httpx import AsyncClient
 
 
-def test_get_access_token(client: TestClient) -> None:
+async def test_get_access_token(client: AsyncClient) -> None:
     login_data = {
         "username": settings.FIRST_USER,
         "password": settings.FIRST_USER_PASSWORD,
     }
-    res = client.post(f"{settings.API_V1_STR}/login/access-token", data=login_data)
+    res = await client.post(
+        f"{settings.API_V1_STR}/login/access-token", data=login_data
+    )
     tokens = res.json()
     assert res.status_code == 200
     assert "access_token" in tokens
     assert tokens["access_token"]
 
 
-def test_get_access_token_incorrect_password(client: TestClient) -> None:
+async def test_get_access_token_incorrect_password(client: AsyncClient) -> None:
     login_data = {
         "username": settings.FIRST_USER,
         "password": "incorrect",
     }
-    res = client.post(f"{settings.API_V1_STR}/login/access-token", data=login_data)
+    res = await client.post(
+        f"{settings.API_V1_STR}/login/access-token", data=login_data
+    )
     assert res.status_code == 400
 
 
-def test_use_access_token(
-    client: TestClient, first_user_token_headers: dict[str, str]
+async def test_use_access_token(
+    client: AsyncClient, first_user_token_headers: dict[str, str]
 ) -> None:
-    res = client.post(
+    res = await client.post(
         f"{settings.API_V1_STR}/login/test-token",
         headers=first_user_token_headers,
     )
