@@ -1,15 +1,16 @@
 from typing import Annotated, AsyncGenerator
 
 import jwt
-from core import security
-from core.config import settings
-from core.db import engine
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jwt.exceptions import InvalidTokenError
-from models import TokenPayload, User
 from pydantic import ValidationError
 from sqlmodel.ext.asyncio.session import AsyncSession
+
+from app.core import security
+from app.core.config import settings
+from app.core.db import engine
+from app.models import TokenPayload, User
 
 reusable_oauth2 = OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_STR}/login")
 

@@ -1,11 +1,11 @@
 from sqlalchemy import NullPool
-from core.config import settings
-from sqlmodel import select
 from sqlalchemy.ext.asyncio import create_async_engine
+from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from crud import UserCreate, create_user
-from models import User
+from app.core.config import settings
+from app.crud import UserCreate, create_user
+from app.models import User
 
 engine = create_async_engine(str(settings.SQLALCHEMY_DATABASE_URI), poolclass=NullPool)
 

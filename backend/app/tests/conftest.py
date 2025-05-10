@@ -1,14 +1,16 @@
 from typing import AsyncGenerator
 
 import pytest
-from core.config import settings
-from core.db import engine, init_db
 from httpx import ASGITransport, AsyncClient
-from main import app
-from models import User
 from sqlmodel import delete
 from sqlmodel.ext.asyncio.session import AsyncSession
-from tests.utils import authentication_token_from_username, get_first_user_token_headers
+
+from app.core.config import settings
+from app.core.db import engine, init_db
+from app.main import app
+from app.models import User
+from app.tests.utils import (authentication_token_from_username,
+                             get_first_user_token_headers)
 
 
 @pytest.fixture(autouse=True)

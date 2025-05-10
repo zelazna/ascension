@@ -4,9 +4,7 @@ from typing import Any
 import bcrypt
 import jwt
 
-
-from core.config import settings
-
+from app.core.config import settings
 
 ALGORITHM = "HS256"
 

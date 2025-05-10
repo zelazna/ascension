@@ -1,10 +1,11 @@
-import crud
 import pytest
-from core.security import verify_password
 from fastapi.encoders import jsonable_encoder
-from models import User, UserCreate, UserUpdate
 from sqlmodel.ext.asyncio.session import AsyncSession
-from tests.utils import random_email, random_lower_string
+
+import app.crud as crud
+from app.core.security import verify_password
+from app.models import User, UserCreate, UserUpdate
+from app.tests.utils import random_email, random_lower_string
 
 
 @pytest.mark.asyncio

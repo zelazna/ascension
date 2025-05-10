@@ -3,7 +3,7 @@ import logging
 
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from core.db import engine, init_db
+from app.core.db import engine, init_db
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

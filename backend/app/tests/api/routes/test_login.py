@@ -1,5 +1,6 @@
-from core.config import settings
 from httpx import AsyncClient
+
+from app.core.config import settings
 
 
 async def test_get_access_token(client: AsyncClient) -> None:

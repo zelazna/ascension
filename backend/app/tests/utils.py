@@ -1,11 +1,12 @@
 import random
 import string
 
-import crud
-from core.config import settings
 from httpx import AsyncClient
-from models import User, UserCreate, UserUpdate
 from sqlmodel.ext.asyncio.session import AsyncSession
+
+import app.crud as crud
+from app.core.config import settings
+from app.models import User, UserCreate, UserUpdate
 
 
 def random_lower_string() -> str:

@@ -27,11 +27,9 @@ jobs:
       - run: docker compose down -v --remove-orphans
       - run: docker compose up -d db
       - name: Migrate DB
-        run: uv run bash scripts/prestart.sh
+        run: PYTHONPATH=$(pwd) uv run bash scripts/prestart.sh
         working-directory: backend
       - name: Run tests
         run: PYTHONPATH=$(pwd) uv run pytest
         working-directory: backend
-        env:
-            PYTHONPATH: $(pwd)
       - run: docker compose down -v --remove-orphans

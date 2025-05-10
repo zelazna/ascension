@@ -1,12 +1,7 @@
 import secrets
 from typing import Annotated, Any
 
-from pydantic import (
-    AnyUrl,
-    BeforeValidator,
-    PostgresDsn,
-    computed_field,
-)
+from pydantic import AnyUrl, BeforeValidator, PostgresDsn, computed_field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -14,7 +9,7 @@ def parse_cors(v: Any) -> list[str] | str:
     if isinstance(v, str) and not v.startswith("["):
         return [i.strip() for i in v.split(",")]
     elif isinstance(v, list | str):
-        return v
+        return v  # type: ignore
     raise ValueError(v)
 
 
